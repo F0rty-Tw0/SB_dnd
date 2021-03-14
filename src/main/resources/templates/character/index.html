@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon and Dragons</title>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/5.0.0-beta2/css/bootstrap.min.css} " />
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container ">
+        <h1 class="text-uppercase text-center py-5">dungeons and dragons</h1>
+        <h2 class="text-capitalize text-center py-2">your character</h2>
+        <div class="container card">
+            <div class="row">
+                <div th:each="race : ${allRaces}">
+                    <div th:if="${race.getRaceName()} == ${myChar.getCharRace()}">
+                        <div th:each="category : ${allCategories}">
+                            <div th:if="${category.getCtgName()} == ${myChar.getCharClass()}">
+                                <div class="row pt-5">
+                                    <div class="col-md-4 col-sm-12">
+                                        <h3 th:text="${myChar.getCharRace()}"
+                                            class="text-uppercase card-title fw-bold pb-3 character__name"></h3>
+                                        <img th:title="${race.getRaceAge()}"
+                                            th:src="'/Races/'+ ${race.getRaceName()}+'.png'"
+                                            class="card-img-top img-fluid" th:alt="${race.getRaceAge()}">
+                                        <p th:text="${race.getRaceAlignment()}" class="card-text"></p>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-12">
+                                        <h3 class="card-title fw-bold pb-3 character__name">Characteristics</h3>
+                                        <div class="pb-3">
+                                            <p th:text="'Speed: ' + ${race.getRaceSpeed()}"
+                                                class="text-success fw-bold d-inline fs-5"></p>
+                                            <p th:text="'Hit Points: ' + ${category.getCtgHitPoints()}"
+                                                class="text-danger fw-bold d-inline float-end fs-5"></p>
+                                        </div>
+
+                                        <div th:title="${race.getRaceLanguageDescription()}">
+                                            <h5 class="d-inline">Languages</h5>
+                                            <div class="text-muted races__languages float-end d-inline"> |
+                                                <p th:each="language: ${race.getRaceLanguages()}"
+                                                    th:text="'&nbsp;' + ${language} + ' | '"
+                                                    th:title="${race.getRaceLanguageDescription()}"
+                                                    class="d-inline float-end "></p>
+                                            </div>
+                                        </div>
+
+                                        <a th:text="'Size: ' + ${race.getRaceSize()}" class="pb-3"
+                                            data-bs-toggle="collapse" th:href="'#'+${race.getRaceName()}" role="button"
+                                            aria-expanded="false" aria-controls="collapseExample">
+                                        </a>
+                                        <div class="collapse" th:id="${race.getRaceName()}">
+                                            <div class="card card-body size__description">
+                                                <p th:text="${race.getRaceSizeDescription()}"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="pt-3" th:if="${race.getRaceStartingProficiencies().size() > 0}">
+                                            <h6 class="card-subtitle text-muted fw-bold">Starting Proficinencies
+                                            </h6>
+                                            <div class="pb-3 text-success">|
+                                                <p th:each="profs: ${race.getRaceStartingProficiencies()}"
+                                                    th:text="${profs} + ' | '" class="card-text d-inline"></p>
+                                            </div>
+                                        </div>
+
+                                        <h6 class="card-subtitle text-muted fw-bold pt-3">Equipment Skills</h6>
+                                        <div class="pb-3 text-success">|
+                                            <p th:each="equipment: ${category.getCtgEquipment()}"
+                                                th:text="${equipment} + ' | '" class="card-text d-inline"></p>
+                                        </div>
+
+                                        <h6 class="card-subtitle text-muted fw-bold pt-3">Racial Traits</h6>
+                                        <div class="pb-3 text-success">|
+                                            <p th:each="trait: ${race.getRaceTraits()}" th:text="${trait} + ' | '"
+                                                class="card-text d-inline"></p>
+                                        </div>
+
+                                        <div>
+                                            <h5 class="d-inline">Proficiencies</h5>
+                                            <p class="d-inline float-end text-muted"
+                                                th:text="'Choose: ' +${category.getCtgProfChoices()}"></p>
+                                        </div>
+                                        <div class="text-muted">|
+                                            <p th:each="profs: ${category.getCtgProf()}" th:text="${profs} + ' | '"
+                                                th:title="..." class="d-inline categorys__languages"></p>
+                                        </div>
+                                        <div class="mt-auto pt-5">
+                                            <h6 class="text-muted fw-bold d-inline">Subclass</h6>
+                                            <p th:text="${category.getCtgSubclass()}"
+                                                class="text-warning d-inline fw-bold float-end">
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-12 d-flex flex-column">
+                                        <h3 th:text="${myChar.getCharClass()}"
+                                            class="text-uppercase card-title fw-bold pb-3 character__name"></h3>
+
+                                        <img th:class="${category.getCtgName()} != 'Wizard' ? 'img-fluid' : 'wizzard--image img-fluid'"
+                                            th:title="..." th:src="'/classes/'+ ${category.getCtgName()}+'.png'"
+                                            th:alt="...">
+                                        <p th:text="${race.getRaceAge()}" class="card-title mt-auto"></p>
+                                    </div>
+                                </div>
+
+                                <h2 class="text-capitalize text-center py-4">Available Spells for your Class</h2>
+                                <div th:each="spell : ${allSpells}"
+                                    th:if="${spell.getSpellClasses().contains(myChar.getCharClass())}">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <a data-bs-toggle="collapse" th:href="'#'+${spell.getSpellIndex()}"
+                                                role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                <p class="d-inline" th:text="${spell.getSpellName()}"></p>
+                                                <p class="d-inline" th:text="' - ' + ${spell.getSpellComponents()}"></p>
+                                                <p class="d-inline text-success float-end"
+                                                    th:text="${spell.getSpellDamageType()}"></p>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <p class="d-inline float-end text-muted"
+                                                th:text="'Spell Level: ' + ${spell.getSpellLevel()}"></p>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <p class="d-inline text-muted"
+                                                th:text="'Casting Time: ' + ${spell.getSpellCastingTime()}"></p>
+
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <p class="d-inline" th:text="'Lasts: ' +${spell.getSpellDuration()}">
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <p class="d-inline float-end text-muted"
+                                                th:text="'Spell Range: ' + ${spell.getSpellRange()}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" th:id="${spell.getSpellIndex()}">
+                                        <div class="card card-body">
+                                            <p th:text="${spell.getSpellDesc()}"></p>
+                                            <p th:text="${spell.getSpellHigherLevel()}"></p>
+                                            <div class="row">
+                                                <div class="col-lg-3"  th:each="dmg: ${spell.getSpellDamageAtLevel()}">
+                                                    <p class="text-danger fw-bold d-inline" th:text="${dmg}"></p>
+                                                    <p class="text-danger d-inline" th:text="'- Damage ' + ${spell.calcDmg(dmg)}"></p>
+                                                </div>
+                                                <div class="col-lg-3"  th:each="heal: ${spell.getSpellHealAtLevel()}">
+                                                    <p class="text-success fw-bold d-inline" th:text="${heal}"></p>
+                                                    <p class="text-success d-inline" th:text="'- Heal ' + ${spell.calcDmg(heal)}">
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/webjars/bootstrap/5.0.0-beta2/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

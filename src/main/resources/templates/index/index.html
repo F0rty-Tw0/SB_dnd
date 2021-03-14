@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon and Dragons</title>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/5.0.0-beta2/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-uppercase text-center py-5">dungeons and dragons</h1>
+        <h2 class="text-capitalize text-center py-2">choose your race</h2>
+        <div class="row">
+            <div th:each="race : ${allRaces}" class="col-xl-4 col-lg-6 col-sm-12 d-flex justify-content-center pb-3">
+                <div class="card">
+                    <img th:title="${race.getRaceAge()}" th:src="'/Races/'+ ${race.getRaceName()}+'B.png'"
+                        class="card-img-top img-fluid" th:alt="${race.getRaceAge()}">
+                    <div class="card-body d-flex flex-column">
+                        <div>
+                            <h5 th:title="${race.getRaceAge()}" th:text="${race.getRaceName()}"
+                                class="card-title d-inline fw-bold"></h5>
+                            <p th:text="'Speed: ' + ${race.getRaceSpeed()}"
+                                class="text-danger d-inline fw-bold float-end"></p>
+                        </div>
+                        <div>
+                            <h5 class="d-inline">Languages</h5>
+                            <div class="text-muted races__languages float-end d-inline"> |
+                                <p th:each="language: ${race.getRaceLanguages()}"
+                                    th:text="'&nbsp;' + ${language} + ' | '"
+                                    th:title="${race.getRaceLanguageDescription()}" class="d-inline float-end "></p>
+                            </div>
+                        </div>
+
+                        <p th:text="${race.getRaceAlignment()}" class=" card-text"></p>
+
+                        <a th:text="'Size: ' + ${race.getRaceSize()}" class="pb-3" data-bs-toggle="collapse"
+                            th:href="'#'+${race.getRaceName()}" role="button" aria-expanded="false"
+                            aria-controls="collapseExample">
+                        </a>
+                        <div class="collapse" th:id="${race.getRaceName()}">
+                            <div class="card card-body size__description">
+                                <p th:text="${race.getRaceSizeDescription()}"></p>
+                            </div>
+                        </div>
+
+                        <div class="pt-3" th:if="${race.getRaceStartingProficiencies().size() > 0}">
+                            <h6 class="card-subtitle text-muted fw-bold">Starting Proficinencies</h6>
+                            <div class="pb-3 text-success">|
+                                <p th:each="profs: ${race.getRaceStartingProficiencies()}" th:text="${profs} + ' | '"
+                                    class="card-text d-inline"></p>
+                            </div>
+                        </div>
+
+                        <h6 class="card-subtitle text-muted fw-bold pt-3">Racial Traits</h6>
+                        <div class="pb-3 text-success">|
+                            <p th:each="trait: ${race.getRaceTraits()}" th:text="${trait} + ' | '"
+                                class="card-text d-inline"></p>
+                        </div>
+                        <h6 th:if="${race.getRaceSubrace()}" class="card-subtitle text-muted fw-bold">Subraces</h6>
+                        <p th:text="${race.getRaceSubrace()}" class="card-text text-warning fw-bold"></p>
+                        <div class="mt-auto pt-3">
+                            <form action="#" th:action="@{/}" th:object="${myChar}" method="post">
+                                <div class="mt-auto">
+                                    <select class="d-none" th:field="*{charRace}">
+                                        <option th:value="${race.getRaceName()}" />
+                                    </select>
+                                    <button type="submit" th:text="'Choose ' + ${race.getRaceName()}"
+                                        class="btn btn-primary"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script th:src="@{/webjars/bootstrap/5.0.0-beta2/js/bootstrap.min.js}"></script>
+</body>
+
+</html>

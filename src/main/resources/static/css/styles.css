@@ -1,0 +1,41 @@
+body {
+	background-color: #eeecee;
+}
+
+a,
+a:hover {
+	font-weight: 700;
+	color: rgb(182, 114, 246);
+	text-decoration: none;
+}
+
+.card {
+	min-width: 350px;
+}
+
+.races__languages {
+	font-size: 80%;
+	margin-top: 5px;
+}
+
+.size__description {
+	min-width: 250px;
+}
+
+.category__icon {
+	margin-top: -45px;
+	padding-bottom: 5px;
+	height: 50px;
+}
+
+.character__card {
+	background-color: #fff;
+}
+
+.character__name {
+	text-align: center;
+}
+
+.wizzard--image {
+	max-width: 50%;
+}
